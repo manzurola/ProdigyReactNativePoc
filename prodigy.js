@@ -40,14 +40,13 @@ class ChoiceButton extends Component {
 }
 
 export default class TransformationQuestion extends Component {
-    _onChoice(selectedChoiceIndex) {
+    onChoice(selectedChoiceIndex) {
         const selectedChoice = this.choices[this.state.index][selectedChoiceIndex];
         this.setState((previousState) => {
-            previousState.solution[selectedChoiceIndex] = selectedChoice;
-            console.log(previousState.solution);
+            previousState.solution[this.state.index] = selectedChoice;
             return {
                 solution: previousState.solution,
-                index: previousState.index + 1
+                index: previousState.index + 1 === this.choices.length ? previousState.index : previousState.index + 1
             }
         });
     }
@@ -60,7 +59,6 @@ export default class TransformationQuestion extends Component {
         ];
         const solution = [];
         this.choices = choices;
-        this.blanks = [];
         for (let i =0; i < choices.length; i++) {
             solution.push("?");
         }
@@ -97,12 +95,12 @@ export default class TransformationQuestion extends Component {
                         style={{flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center'}}>{blanks}</View>
                 </View>
                 <View style={{flex: 0.03,flexDirection:'row',justifyContent: 'center'}}>
-                    <ChoiceButton text={this.choices[this.state.index][0]} onPress={() => this._onChoice(0)}/>
-                    <ChoiceButton text={this.choices[this.state.index][1]} onPress={() => this._onChoice(1)}/>
+                    <ChoiceButton text={this.choices[this.state.index][0]} onPress={() => this.onChoice(0)}/>
+                    <ChoiceButton text={this.choices[this.state.index][1]} onPress={() => this.onChoice(1)}/>
                 </View>
                 <View style={{flex: 0.03,flexDirection:'row',justifyContent: 'center'}}>
-                    <ChoiceButton text={this.choices[this.state.index][2]} onPress={() => this._onChoice(2)}/>
-                    <ChoiceButton text={this.choices[this.state.index][3]} onPress={() => this._onChoice(3)}/>
+                    <ChoiceButton text={this.choices[this.state.index][2]} onPress={() => this.onChoice(2)}/>
+                    <ChoiceButton text={this.choices[this.state.index][3]} onPress={() => this.onChoice(3)}/>
                 </View>
             </View>
         );
