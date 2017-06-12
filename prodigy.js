@@ -41,12 +41,23 @@ class ChoiceButton extends Component {
 
 export default class TransformationQuestion extends Component {
     onChoice(selectedChoiceIndex) {
+        if (this.state.complete) return;
+
+        // if choice is correct
+        //      increment score, put word in blank
+        //      if more words, load next word
+        // else
+        //      decrement hitpoints,
+
         const selectedChoice = this.choices[this.state.index][selectedChoiceIndex];
         this.setState((previousState) => {
             previousState.solution[this.state.index] = selectedChoice;
+            // if current choice was last, question is complete
+            const questionComplete = previousState.index + 1 === this.choices.length;
             return {
                 solution: previousState.solution,
-                index: previousState.index + 1 === this.choices.length ? previousState.index : previousState.index + 1
+                index: questionComplete ? previousState.index : previousState.index + 1,
+                complete: questionComplete
             }
         });
     }
@@ -65,7 +76,8 @@ export default class TransformationQuestion extends Component {
         this.state = {
             sourceSentence: props.sourceSentence,
             index: 0,
-            solution: solution
+            solution: solution,
+            complete: false
         }
     }
 
