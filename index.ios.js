@@ -17,9 +17,9 @@ const data = {
     body: "A dog is cute.",
     answer: ["dogs", "are", "cute"],
     choices: [
-        ["dogs", "dog", "a", ""],
-        ["", "are", "cute", ""],
-        ["", "", "cute", ""]
+        ["dogs", "dog", "a"],
+        ["is", "are", "cute"],
+        ["cutes", "a", "cute"]
     ]
 };
 
