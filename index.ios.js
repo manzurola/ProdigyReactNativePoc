@@ -13,20 +13,21 @@ import {
   View
 } from 'react-native';
 
+const data = {
+    body: "A dog is cute.",
+    answer: ["dogs", "are", "cute"],
+    choices: [
+        ["dogs", "dog", "a", ""],
+        ["", "are", "cute", ""],
+        ["", "", "cute", ""]
+    ]
+};
+
 export default class ProdigyReactNativePoc extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <TransformationQuestion body={data.body} answer={data.answer} choices={data.choices}/>
       </View>
     );
   }
@@ -35,8 +36,8 @@ export default class ProdigyReactNativePoc extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
@@ -51,4 +52,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('ProdigyReactNativePoc', () => TransformationQuestion);
+AppRegistry.registerComponent('ProdigyReactNativePoc', () => ProdigyReactNativePoc);
