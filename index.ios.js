@@ -57,8 +57,8 @@ export default class ProdigyReactNativePoc extends Component {
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true}/>
-                {/*<RewriteTheSentenceQuestion body={rewriteTheSentencedata.body} answer={rewriteTheSentencedata.answer} choices={rewriteTheSentencedata.choices}/>*/}
-                <FillInTheBlanksQuestion body={fillInTheBlanksedata.body} answer={fillInTheBlanksedata.answer} choices={fillInTheBlanksedata.choices} blankToken={fillInTheBlanksedata.blankToken}/>
+                <RewriteTheSentenceQuestion body={rewriteTheSentencedata.body} answer={rewriteTheSentencedata.answer} choices={rewriteTheSentencedata.choices}/>
+                {/*<FillInTheBlanksQuestion body={fillInTheBlanksedata.body} answer={fillInTheBlanksedata.answer} choices={fillInTheBlanksedata.choices} blankToken={fillInTheBlanksedata.blankToken}/>*/}
             </View>
         );
     }
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // backgroundColor:'rgba(118, 113, 213, 0.9)',
         // backgroundColor: '#F5FCFF',
-        backgroundColor: 'black'
+        backgroundColor: '#FAF8F4'
     },
     welcome: {
         fontSize: 20,

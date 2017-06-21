@@ -35,7 +35,7 @@ class Choice extends Component {
         return (
             <TouchableHighlight style={styles.choiceButton} onPress={this.props.onPress}>
                 <Text
-                    style={{textAlign:'center', fontFamily:'TheKingsoftheHouse-Regular', fontSize:32}}>{this.props.text}</Text>
+                    style={{textAlign:'center',  fontSize:32}}>{this.props.text}</Text>
             </TouchableHighlight>
         )
     }
@@ -149,7 +149,7 @@ export default class RewriteTheSentenceQuestion extends Component {
 
 const styles = StyleSheet.create({
     bodyText: {
-        fontFamily: 'TheKingsoftheHouse-Regular',
+        // fontFamily: 'TheKingsoftheHouse-Regular',
         fontSize: 28,
         textAlign: 'center',
         textShadowColor: "black",

@@ -2,6 +2,7 @@
  * Created by guym on 05/06/2017.
  */
 import React, {Component} from "react";
+import ShakingText from "react-native-shaking-text";
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import {
     AppRegistry,
@@ -14,11 +15,14 @@ import {
     ListView,
     TouchableHighlight,
     TouchableWithoutFeedback,
-    Button
+    Button,
+    Animated,
+    Easing
 } from "react-native";
 
 
-{/*const myIcon = (<Icon name="rocket" size={30} color="#900" />)*/}
+{/*const myIcon = (<Icon name="rocket" size={30} color="#900" />)*/
+}
 
 class Blank extends Component {
     constructor(props) {
@@ -35,10 +39,11 @@ class Blank extends Component {
 }
 
 class Choice extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         console.log(props);
     }
+
     render() {
         return (
             <TouchableHighlight style={styles.choiceButton} onPress={this.props.onPress}>
@@ -50,52 +55,48 @@ class Choice extends Component {
 }
 
 class BodyAndAnswer extends Component {
+    state = {
+        fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
+    };
+
+    componentDidMount() {
+        Animated.timing(                  // Animate over time
+            this.state.fadeAnim,            // The animated value to drive
+            {
+                toValue: 1,                   // Animate to opacity: 1 (opaque)
+                duration: 150              // Make it take a while
+            }
+        ).start();                        // Starts the animation
+    }
+
     render() {
+        let {fadeAnim} = this.state;
         let parts = [];
         for (let i = 0; i < this.props.body.length; i++) {
             let part = this.props.body[i];
             if (part.isBlank) {
                 let choice = this.props.answer[part.blankIndex];
-                let textValue;
-                if (choice !== undefined) {
-                    part = <Text style={styles.bodyText} key={i}>{choice.text}</Text>
-                } else {
-                    part = <Text style={styles.bodyText} key={i}>?</Text>
-                }
+                let text;
+
+                if (choice !== undefined) text = choice.text;
+                else text = '?';
+
+                part = <ShakingText style={styles.bodyText} key={i}>{text}</ShakingText>;
+
             } else {
                 part = <Text style={styles.bodyText} key={i}>{part.text}</Text>
             }
+
             parts.push(part);
         }
         return (
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <Animated.View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                opacity: fadeAnim
+            }}>
                 {parts}
-            </View>
-        )
-    }
-}
-
-class Answer extends Component {
-    render() {
-        var view = [];
-        for (let i = 0; i < this.props.words.length; i++) {
-            let text;
-            const word = this.props.words[i];
-            const correct = word === this.props.answerKey[i];
-            if (this.props.showResult) {
-                if (correct) {
-                    text = <Text style={[styles.answerWordText, {color:'green'}]} key={i}>{word}</Text>;
-                } else {
-                    text = <Text style={[styles.answerWordText, {color:'red'}]} key={i}>{word}</Text>;
-                }
-            } else {
-                text = <Text style={styles.answerWordText} key={i}>{word}</Text>;
-            }
-            view.push(text);
-        }
-        return (
-            <View
-                style={{flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center', alignContent:'space-between'}}>{view}</View>
+            </Animated.View>
         )
     }
 }
@@ -134,24 +135,20 @@ export default class FillInTheBlanksQuestion extends Component {
     render() {
         return (
             <View style={{ flex:1,flexDirection: 'column', paddingBottom: 15, paddingTop: 15}}>
-                <View style={{
-                    flex: 0.2,
-                    justifyContent: 'center',
-                    borderWidth: 3,
-                    backgroundColor:'rgba(118, 113, 213, 0.9)',
-                    margin: 1,
-                    borderRadius: 5,
-                    shadowRadius:1,
-                    shadowOpacity: 1.0,
-                    shadowColor: 'black',
-                    shadowOffset: {width: 0, height: 1}
-                }}>
-                    <BodyAndAnswer blankToken={this.props.blankToken} body={this.props.body} answer={this.state.answer}/>
+                <View style={styles.bodyAndAnswer}>
+                    <BodyAndAnswer blankToken={this.props.blankToken}
+                                   body={this.props.body}
+                                   answer={this.state.answer}/>
                 </View>
-                <View style={{flex: 0.15,flexDirection:'column',justifyContent: 'center', backgroundColor:'black', paddingTop: 3, paddingBottom:3}}>
+                <View
+                    style={{flex: 0.13,flexDirection:'column',justifyContent: 'center', paddingTop: 3, paddingBottom:3}}>
+                    <View style={styles.lineSeparator}/>
                     <Choice data={this.props.choices[this.state.index][0]} onPress={() => this.onChoice(0)}/>
+                    <View style={styles.lineSeparator}/>
                     <Choice data={this.props.choices[this.state.index][1]} onPress={() => this.onChoice(1)}/>
+                    <View style={styles.lineSeparator}/>
                     <Choice data={this.props.choices[this.state.index][2]} onPress={() => this.onChoice(2)}/>
+                    <View style={styles.lineSeparator}/>
                 </View>
             </View>
         );
@@ -159,54 +156,40 @@ export default class FillInTheBlanksQuestion extends Component {
 }
 
 const styles = StyleSheet.create({
+    lineSeparator: {
+        borderWidth: 0.3,
+        height: 0,
+        borderColor: 'gray'
+        // flex:1
+    },
+    bodyAndAnswer: {
+        flex: 0.2,
+        justifyContent: 'center',
+        margin: 20
+    },
     bodyText: {
         fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 28,
-        textAlign: 'center',
-        textShadowColor: "black",
+        fontSize: 34,
+        textShadowColor: "#D6D4D1",
         textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 1,
-        textDecorationColor: 'black',
-        color: "white",
-        textDecorationStyle: 'solid'
-    },
-    answerWordText: {
-        padding: 2,
-        fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 28,
-        textAlign: 'center',
-        // textShadowColor: "black",
-        // textShadowOffset: {width: -1, height: -1},
-        // textShadowRadius: 3,
-        // textDecorationColor: 'black',
-        color: "black",
-        textDecorationStyle: 'solid'
+        textShadowRadius: 0,
+        color: "black"
     },
     choiceButton: {
         flex: 1,
-        borderWidth: 3,
         justifyContent: 'center',
-        shadowRadius: 3,
-        shadowColor: 'black',
-        shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 1.0,
-        // marginTop: 5,
-        // marginLeft:5,
-        // marginRight:5,
-        paddingTop: 15,
-        paddingBottom: 15,
-        backgroundColor:'rgba(118, 113, 213, 0.9)',
-        borderRadius: 5
+        paddingTop: 10,
+        paddingBottom: 10,
     },
     choiceText: {
-        textShadowColor: "black",
-        textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 1,
         textDecorationColor: 'black',
-        color: "white",
+        color: "black",
         textDecorationStyle: 'solid',
-        textAlign:'center',
-        fontFamily:'TheKingsoftheHouse-Regular',
-        fontSize:32
+        textShadowColor: "#D6D4D1",
+        textShadowOffset: {width: -1, height: 1},
+        textShadowRadius: 0,
+        textAlign: 'center',
+        fontFamily: 'TheKingsoftheHouse-Regular',
+        fontSize: 28
     }
 });
