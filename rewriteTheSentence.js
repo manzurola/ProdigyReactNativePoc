@@ -56,8 +56,17 @@ class Answer extends Component {
             view.push(text);
         }
         return (
-            <View
-                style={{flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center', alignContent:'space-between'}}>{view}</View>
+            <TouchableHighlight
+                onPress={this.props.onPress}
+                style={styles.answer}>
+                <View style={{
+                    flexWrap: 'wrap',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    alignContent:'space-between',
+                }}>{view}</View>
+            </TouchableHighlight>
         )
     }
 }
@@ -80,20 +89,11 @@ export default class RewriteTheSentenceQuestion extends Component {
                 <View style={styles.body}>
                     <Text style={styles.bodyText}>{this.props.body}</Text>
                 </View>
-                <View style={styles.answer}>
-                    <TouchableWithoutFeedback onPress={() => this.deleteLastWordInAnswer()}>
-                        <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderRadius: 30,
-                        minHeight: 50,
-                        width: 300
-                    }}><Answer words={this.state.answer} answerKey={this.props.answer}
-                               showResult={this.state.complete}/>
-                        </View>
-                    </TouchableWithoutFeedback>
+                <View style={styles.answerContainer}>
+                    <Answer onPress={() => this.deleteLastWordInAnswer()}
+                            words={this.state.answer}
+                            answerKey={this.props.answer}
+                            showResult={this.state.complete}/>
                 </View>
                 <View style={styles.choices}>
                     <Choice style={styles.choice} text={this.props.choices[this.state.index][0]}
@@ -189,11 +189,24 @@ const styles = StyleSheet.create({
         flex: 0.3,
         justifyContent: 'center',
     },
-    answer: {
+    answerContainer: {
         flex: 0.25,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    answer: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderRadius: 30,
+        minHeight: 50,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 30,
+        paddingRight: 30,
+        width: 300
     },
     choices: {
         flex: 0.25,
