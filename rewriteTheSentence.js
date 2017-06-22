@@ -2,7 +2,6 @@
  * Created by guym on 05/06/2017.
  */
 import React, {Component} from "react";
-import AnimatedList from 'react-native-animated-list';
 import {
     AppRegistry,
     StyleSheet,
@@ -16,26 +15,23 @@ import {
     TouchableWithoutFeedback
 } from "react-native";
 
-class Blank extends Component {
+class Choice extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            pressed: false
+        }
     }
 
     render() {
         return (
-            <View>
-                <Text>{this.props.text}</Text>
-            </View>
-        )
-    }
-}
-
-class Choice extends Component {
-    render() {
-        return (
-            <TouchableHighlight style={styles.choiceButton} onPress={this.props.onPress}>
-                <Text
-                    style={{textAlign:'center',  fontSize:20}}>{this.props.text}</Text>
+            <TouchableHighlight activeOpacity={1}
+                                style={this.state.pressed ? styles.choicePressed : styles.choice}
+                                onPress={this.props.onPress}
+                                onHideUnderlay={()=>{this.setState({pressed: false})}}
+                                onShowUnderlay={()=>{this.setState({pressed: true})}}
+            >
+                <Text style={this.state.pressed ? styles.choiceTextPressed: styles.choiceText}>{this.props.text}</Text>
             </TouchableHighlight>
         )
     }
@@ -67,36 +63,6 @@ class Answer extends Component {
 }
 
 export default class RewriteTheSentenceQuestion extends Component {
-    onChoice(selectedChoiceIndex) {
-        if (this.state.complete) return;
-        const selectedChoice = this.props.choices[this.state.index][selectedChoiceIndex];
-        this.setState((previousState) => {
-            previousState.answer.push(selectedChoice);
-            // if current choice was last, question is complete
-            const questionComplete = this.props.answer.length === this.state.answer.length;
-            return {
-                answer: previousState.answer,
-                index: questionComplete ? previousState.index : previousState.index + 1,
-                complete: questionComplete
-            }
-        });
-    }
-
-    skipQuestion() {
-        console.log('TODO skip question');
-    }
-
-    deleteLastWordInAnswer() {
-        console.log("delete last word in answer");
-        this.setState((previousState) => {
-            previousState.answer.pop();
-            return {
-                answer: previousState.answer
-            }
-        });
-    }
-
-    // can control animation of new choices in answer using the current index
 
     constructor(props) {
         super(props);
@@ -130,14 +96,48 @@ export default class RewriteTheSentenceQuestion extends Component {
                     </TouchableWithoutFeedback>
                 </View>
                 <View style={styles.choices}>
-                    <Choice text={this.props.choices[this.state.index][0]} onPress={() => this.onChoice(0)}/>
-                    <Choice text={this.props.choices[this.state.index][1]} onPress={() => this.onChoice(1)}/>
-                    <Choice text={this.props.choices[this.state.index][2]} onPress={() => this.onChoice(2)}/>
+                    <Choice style={styles.choice} text={this.props.choices[this.state.index][0]}
+                            onPress={() => this.onChoice(0)}/>
+                    <Choice style={styles.choice} text={this.props.choices[this.state.index][1]}
+                            onPress={() => this.onChoice(1)}/>
+                    <Choice style={styles.choice} text={this.props.choices[this.state.index][2]}
+                            onPress={() => this.onChoice(2)}/>
                 </View>
                 <View style={styles.footer}/>
             </View>
         );
     }
+
+    onChoice(selectedChoiceIndex) {
+        if (this.state.complete) return;
+        const selectedChoice = this.props.choices[this.state.index][selectedChoiceIndex];
+        this.setState((previousState) => {
+            previousState.answer.push(selectedChoice);
+            // if current choice was last, question is complete
+            const questionComplete = this.props.answer.length === this.state.answer.length;
+            return {
+                answer: previousState.answer,
+                index: questionComplete ? previousState.index : previousState.index + 1,
+                complete: questionComplete
+            }
+        });
+    }
+
+    skipQuestion() {
+        console.log('TODO skip question');
+    }
+
+    deleteLastWordInAnswer() {
+        console.log("delete last word in answer");
+        this.setState((previousState) => {
+            previousState.answer.pop();
+            return {
+                answer: previousState.answer
+            }
+        });
+    }
+
+    // can control animation of new choices in answer using the current index
 }
 
 const styles = StyleSheet.create({
@@ -153,16 +153,33 @@ const styles = StyleSheet.create({
         color: "black",
         textDecorationStyle: 'solid'
     },
-    choiceButton: {
+    choice: {
         width: 220,
         height: 50,
         borderWidth: 1,
         borderRadius: 30,
-        // padding:10,
         justifyContent: 'center',
-        shadowRadius: 10,
-        shadowColor: 'black',
-        shadowOffset: {width: -10, height: -10}
+        overflow: 'hidden',
+        backgroundColor: 'black'
+    },
+    choicePressed: {
+        width: 220,
+        height: 50,
+        borderWidth: 1,
+        borderRadius: 30,
+        justifyContent: 'center',
+        overflow: 'hidden',
+        backgroundColor: 'white'
+    },
+    choiceText: {
+        textAlign: 'center',
+        fontSize: 20,
+        color: 'white'
+    },
+    choiceTextPressed: {
+        textAlign: 'center',
+        fontSize: 20,
+        color: 'black'
     },
     body: {
         flex: 0.3,

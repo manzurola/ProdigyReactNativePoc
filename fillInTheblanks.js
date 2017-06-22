@@ -46,7 +46,7 @@ class Choice extends Component {
 
     render() {
         return (
-            <TouchableHighlight style={styles.choiceButton} onPress={this.props.onPress}>
+            <TouchableHighlight style={styles.choice} onPress={this.props.onPress}>
                 <Text
                     style={styles.choiceText}>{this.props.data.text}</Text>
             </TouchableHighlight>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         textShadowRadius: 0,
         color: "black"
     },
-    choiceButton: {
+    choice: {
         flex: 1,
         justifyContent: 'center',
         paddingTop: 10,
