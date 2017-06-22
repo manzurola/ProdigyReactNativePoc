@@ -4,7 +4,6 @@
  * @flow
  */
 import RewriteTheSentenceQuestion from "./rewriteTheSentence.js";
-import FillInTheBlanksQuestion from "./fillInTheblanks.js";
 import React, {Component} from "react";
 import {AppRegistry, StyleSheet, Text, View, StatusBar} from "react-native";
 
@@ -15,6 +14,22 @@ const rewriteTheSentencedata = {
         ["dogs", "dog", "a"],
         ["is", "are", "cute"],
         ["cutes", "a", "cute"]
+    ]
+};
+
+const rewriteTheSentencedata2 = {
+    body: "Exercises are not always easy for beginners.",
+    answer: ["an", "exercise", "is", "not", "always", "easy", "for", "a", "beginner"],
+    choices: [
+        ["exercise", "a", "an"],
+        ["is", "are", "exercise"],
+        ["is", "not", "are"],
+        ["always", "not", "isn't"],
+        ["is", "easy", "always"],
+        ["easy", "for", "always"],
+        ["beginners", "for", "beginner"],
+        ["a", "beginners", "beginner"],
+        ["beginners", "beginner", ""]
     ]
 };
 
@@ -38,16 +53,16 @@ const fillInTheBlanksedata = {
             correct: true,
             index: 0
         },
-        {
-            text: "an",
-            correct: false,
-            index: 0
-        },
-        {
-            text: "some",
-            correct: false,
-            index: 0
-        }]
+            {
+                text: "an",
+                correct: false,
+                index: 0
+            },
+            {
+                text: "some",
+                correct: false,
+                index: 0
+            }]
     ],
     blankToken: '<?>'
 };
@@ -57,7 +72,8 @@ export default class ProdigyReactNativePoc extends Component {
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true}/>
-                <RewriteTheSentenceQuestion body={rewriteTheSentencedata.body} answer={rewriteTheSentencedata.answer} choices={rewriteTheSentencedata.choices}/>
+                <RewriteTheSentenceQuestion body={rewriteTheSentencedata2.body} answer={rewriteTheSentencedata2.answer}
+                                            choices={rewriteTheSentencedata2.choices}/>
                 {/*<FillInTheBlanksQuestion body={fillInTheBlanksedata.body} answer={fillInTheBlanksedata.answer} choices={fillInTheBlanksedata.choices} blankToken={fillInTheBlanksedata.blankToken}/>*/}
             </View>
         );

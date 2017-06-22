@@ -39,7 +39,7 @@ class Choice extends Component {
 
 class Answer extends Component {
     render() {
-        var view = [];
+        let view = [];
         for (let i = 0; i < this.props.words.length; i++) {
             let text;
             const word = this.props.words[i];
@@ -81,7 +81,7 @@ export default class RewriteTheSentenceQuestion extends Component {
                     <Text style={styles.bodyText}>{this.props.body}</Text>
                 </View>
                 <View style={styles.answer}>
-                    <TouchableWithoutFeedback onPress={() => this.deleteLastWordInAnswer}>
+                    <TouchableWithoutFeedback onPress={() => this.deleteLastWordInAnswer()}>
                         <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
@@ -129,10 +129,12 @@ export default class RewriteTheSentenceQuestion extends Component {
 
     deleteLastWordInAnswer() {
         console.log("delete last word in answer");
+        if (this.state.index === 0 || this.state.complete) return;
         this.setState((previousState) => {
             previousState.answer.pop();
             return {
-                answer: previousState.answer
+                answer: previousState.answer,
+                index: previousState.index - 1
             }
         });
     }
@@ -143,8 +145,10 @@ export default class RewriteTheSentenceQuestion extends Component {
 const styles = StyleSheet.create({
     bodyText: {
         // fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 28,
-        textAlign: 'center'
+        fontSize: 24,
+        textAlign: 'center',
+        paddingLeft: 30,
+        paddingRight: 30,
     },
     answerWordText: {
         padding: 2,
