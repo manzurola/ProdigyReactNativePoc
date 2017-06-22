@@ -2,6 +2,7 @@
  * Created by guym on 05/06/2017.
  */
 import React, {Component} from "react";
+import AnimatedList from 'react-native-animated-list';
 import {
     AppRegistry,
     StyleSheet,
@@ -12,8 +13,7 @@ import {
     ScrollView,
     ListView,
     TouchableHighlight,
-    TouchableWithoutFeedback,
-    Button
+    TouchableWithoutFeedback
 } from "react-native";
 
 class Blank extends Component {
@@ -35,7 +35,7 @@ class Choice extends Component {
         return (
             <TouchableHighlight style={styles.choiceButton} onPress={this.props.onPress}>
                 <Text
-                    style={{textAlign:'center',  fontSize:32}}>{this.props.text}</Text>
+                    style={{textAlign:'center',  fontSize:20}}>{this.props.text}</Text>
             </TouchableHighlight>
         )
     }
@@ -110,38 +110,31 @@ export default class RewriteTheSentenceQuestion extends Component {
     render() {
         return (
             <View style={{ flex:1,flexDirection: 'column'}}>
-                <View style={{
-                    flex: 0.1,
-                    justifyContent: 'center',
-                    borderBottomWidth: 0.5,
-                    backgroundColor:'rgba(118, 113, 213, 0.9)',
-                    /*shadowRadius:50,
-                    shadowOpacity: 1.0,
-                    shadowColor: 'black',
-                    shadowOffset: {width: -10, height: -10}*/
-                }}>
+                <View style={styles.header}/>
+                <View style={styles.body}>
                     <Text style={styles.bodyText}>{this.props.body}</Text>
                 </View>
-                <TouchableWithoutFeedback onPress={() => this.deleteLastWordInAnswer}>
-                    <View style={{
-                        flex: 0.1,
+                <View style={styles.answer}>
+                    <TouchableWithoutFeedback onPress={() => this.deleteLastWordInAnswer}>
+                        <View style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        borderBottomWidth: 1
+                        borderWidth: 1,
+                        borderRadius: 30,
+                        minHeight: 50,
+                        width: 300
                     }}><Answer words={this.state.answer} answerKey={this.props.answer}
                                showResult={this.state.complete}/>
-                    </View>
-                </TouchableWithoutFeedback>
-                <View style={{flex: 0.1,flexDirection:'column',justifyContent: 'center'}}>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
+                <View style={styles.choices}>
                     <Choice text={this.props.choices[this.state.index][0]} onPress={() => this.onChoice(0)}/>
                     <Choice text={this.props.choices[this.state.index][1]} onPress={() => this.onChoice(1)}/>
                     <Choice text={this.props.choices[this.state.index][2]} onPress={() => this.onChoice(2)}/>
-                    <TouchableHighlight style={[styles.choiceButton, {backgroundColor: 'black'}]}>
-                        <Text style={{fontFamily:'TheKingsoftheHouse-Regular', textAlign:'center', color:'white'}}
-                              onPress={() => this.skipQuestion}>Skip Question</Text>
-                    </TouchableHighlight>
                 </View>
+                <View style={styles.footer}/>
             </View>
         );
     }
@@ -151,33 +144,46 @@ const styles = StyleSheet.create({
     bodyText: {
         // fontFamily: 'TheKingsoftheHouse-Regular',
         fontSize: 28,
-        textAlign: 'center',
-        textShadowColor: "black",
-        textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 1,
-        textDecorationColor: 'black',
-        color: "white",
-        textDecorationStyle: 'solid'
+        textAlign: 'center'
     },
     answerWordText: {
         padding: 2,
-        fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 28,
+        fontSize: 20,
         textAlign: 'center',
-        // textShadowColor: "black",
-        // textShadowOffset: {width: -1, height: -1},
-        // textShadowRadius: 3,
-        // textDecorationColor: 'black',
         color: "black",
         textDecorationStyle: 'solid'
     },
     choiceButton: {
-        flex: 1,
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
+        width: 220,
+        height: 50,
+        borderWidth: 1,
+        borderRadius: 30,
+        // padding:10,
         justifyContent: 'center',
         shadowRadius: 10,
         shadowColor: 'black',
         shadowOffset: {width: -10, height: -10}
+    },
+    body: {
+        flex: 0.3,
+        justifyContent: 'center',
+    },
+    answer: {
+        flex: 0.25,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    choices: {
+        flex: 0.25,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    header: {
+        flex: 0.1
+    },
+    footer: {
+        flex: 0.1
     }
 });
