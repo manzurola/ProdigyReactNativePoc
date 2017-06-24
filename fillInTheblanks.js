@@ -42,13 +42,26 @@ class Choice extends Component {
     constructor(props) {
         super(props);
         console.log(props);
+        this.state = {
+            pressed: false
+        }
     }
+
+    componentWillReceiveProps(nextProps) {
+        console.log('componentWillReceiveProps:');
+        console.log(nextProps);
+    }
+
 
     render() {
         return (
-            <TouchableHighlight style={styles.choice} onPress={this.props.onPress}>
-                <Text
-                    style={styles.choiceText}>{this.props.data.text}</Text>
+            <TouchableHighlight activeOpacity={1}
+                                style={this.state.pressed ? styles.choicePressed : styles.choice}
+                                onPress={this.props.onPress}
+                                onHideUnderlay={()=>{this.setState({pressed: false})}}
+                                onShowUnderlay={()=>{this.setState({pressed: true})}}
+            >
+                <Text style={this.state.pressed ? styles.choiceTextPressed: styles.choiceText}>{this.props.text}</Text>
             </TouchableHighlight>
         )
     }
@@ -76,12 +89,10 @@ class BodyAndAnswer extends Component {
             let part = this.props.body[i];
             if (part.isBlank) {
                 let choice = this.props.answer[part.blankIndex];
-                let text;
 
-                if (choice !== undefined) text = choice.text;
-                else text = '?';
+                if (choice === undefined) choice = '?';
 
-                part = <ShakingText style={styles.bodyText} key={i}>{text}</ShakingText>;
+                part = <ShakingText style={styles.bodyText} key={i}>{choice}</ShakingText>;
 
             } else {
                 part = <Text style={styles.bodyText} key={i}>{part.text}</Text>
@@ -134,21 +145,19 @@ export default class FillInTheBlanksQuestion extends Component {
 
     render() {
         return (
-            <View style={{ flex:1,flexDirection: 'column', paddingBottom: 15, paddingTop: 15}}>
+            <View style={{ flex:1,flexDirection: 'column'}}>
                 <View style={styles.bodyAndAnswer}>
                     <BodyAndAnswer blankToken={this.props.blankToken}
                                    body={this.props.body}
                                    answer={this.state.answer}/>
                 </View>
-                <View
-                    style={{flex: 0.13,flexDirection:'column',justifyContent: 'center', paddingTop: 3, paddingBottom:3}}>
-                    <View style={styles.lineSeparator}/>
-                    <Choice data={this.props.choices[this.state.index][0]} onPress={() => this.onChoice(0)}/>
-                    <View style={styles.lineSeparator}/>
-                    <Choice data={this.props.choices[this.state.index][1]} onPress={() => this.onChoice(1)}/>
-                    <View style={styles.lineSeparator}/>
-                    <Choice data={this.props.choices[this.state.index][2]} onPress={() => this.onChoice(2)}/>
-                    <View style={styles.lineSeparator}/>
+                <View style={styles.choices}>
+                    <Choice style={styles.choice} text={this.props.choices[this.state.index][0]}
+                            onPress={() => this.onChoice(0)}/>
+                    <Choice style={styles.choice} text={this.props.choices[this.state.index][1]}
+                            onPress={() => this.onChoice(1)}/>
+                    <Choice style={styles.choice} text={this.props.choices[this.state.index][2]}
+                            onPress={() => this.onChoice(2)}/>
                 </View>
             </View>
         );
@@ -156,40 +165,45 @@ export default class FillInTheBlanksQuestion extends Component {
 }
 
 const styles = StyleSheet.create({
-    lineSeparator: {
-        borderWidth: 0.3,
-        height: 0,
-        borderColor: 'gray'
-        // flex:1
-    },
     bodyAndAnswer: {
-        flex: 0.2,
-        justifyContent: 'center',
-        margin: 20
+        flex: 0.5,
+        justifyContent: 'center'
     },
     bodyText: {
-        fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 34,
-        textShadowColor: "#D6D4D1",
-        textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 0,
-        color: "black"
+        fontSize: 24,
+    },
+    choices: {
+        flex: 0.25,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     choice: {
-        flex: 1,
+        width: 220,
+        height: 50,
+        borderWidth: 1,
+        borderRadius: 30,
         justifyContent: 'center',
-        paddingTop: 10,
-        paddingBottom: 10,
+        overflow: 'hidden',
+        backgroundColor: 'black'
+    },
+    choicePressed: {
+        width: 220,
+        height: 50,
+        borderWidth: 1,
+        borderRadius: 30,
+        justifyContent: 'center',
+        overflow: 'hidden',
+        backgroundColor: 'white'
     },
     choiceText: {
-        textDecorationColor: 'black',
-        color: "black",
-        textDecorationStyle: 'solid',
-        textShadowColor: "#D6D4D1",
-        textShadowOffset: {width: -1, height: 1},
-        textShadowRadius: 0,
         textAlign: 'center',
-        fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 28
+        fontSize: 20,
+        color: 'white'
+    },
+    choiceTextPressed: {
+        textAlign: 'center',
+        fontSize: 20,
+        color: 'black'
     }
 });

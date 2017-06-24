@@ -23,6 +23,12 @@ class Choice extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log('componentWillReceiveProps:');
+        console.log(nextProps);
+    }
+
+
     render() {
         return (
             <TouchableHighlight activeOpacity={1}
@@ -85,7 +91,6 @@ export default class RewriteTheSentenceQuestion extends Component {
     render() {
         return (
             <View style={{ flex:1,flexDirection: 'column'}}>
-                <View style={styles.header}/>
                 <View style={styles.body}>
                     <Text style={styles.bodyText}>{this.props.body}</Text>
                 </View>
@@ -103,7 +108,6 @@ export default class RewriteTheSentenceQuestion extends Component {
                     <Choice style={styles.choice} text={this.props.choices[this.state.index][2]}
                             onPress={() => this.onChoice(2)}/>
                 </View>
-                <View style={styles.footer}/>
             </View>
         );
     }
@@ -157,6 +161,12 @@ const styles = StyleSheet.create({
         color: "black",
         textDecorationStyle: 'solid'
     },
+    choices: {
+        flex: 0.25,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
     choice: {
         width: 220,
         height: 50,
@@ -207,17 +217,5 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
         paddingRight: 30,
         width: 300
-    },
-    choices: {
-        flex: 0.25,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    header: {
-        flex: 0.1
-    },
-    footer: {
-        flex: 0.1
     }
 });
