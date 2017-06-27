@@ -85,8 +85,8 @@ class BodyAndAnswer extends Component {
     render() {
         let {fadeAnim} = this.state;
         let parts = [];
-        for (let i = 0; i < this.props.body.length; i++) {
-            let part = this.props.body[i];
+        for (let i = 0; i < this.props.bodyContainer.length; i++) {
+            let part = this.props.bodyContainer[i];
             if (part.isBlank) {
                 let choice = this.props.answer[part.blankIndex];
 
@@ -115,7 +115,7 @@ class BodyAndAnswer extends Component {
 export default class FillInTheBlanksQuestion extends Component {
     onChoice(selectedChoiceIndex) {
         if (this.state.complete) return;
-        const selectedChoice = this.props.choices[this.state.index][selectedChoiceIndex];
+        const selectedChoice = this.props.choicesContainer[this.state.index][selectedChoiceIndex];
         this.setState((previousState) => {
             previousState.answer.push(selectedChoice);
             // if current choice was last, question is complete
@@ -132,7 +132,7 @@ export default class FillInTheBlanksQuestion extends Component {
         console.log('TODO skip question');
     }
 
-    // can control animation of new choices in answer using the current index
+    // can control animation of new choicesContainer in answer using the current index
 
     constructor(props) {
         super(props);
@@ -148,15 +148,15 @@ export default class FillInTheBlanksQuestion extends Component {
             <View style={{ flex:1,flexDirection: 'column'}}>
                 <View style={styles.bodyAndAnswer}>
                     <BodyAndAnswer blankToken={this.props.blankToken}
-                                   body={this.props.body}
+                                   body={this.props.bodyContainer}
                                    answer={this.state.answer}/>
                 </View>
-                <View style={styles.choices}>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][0]}
+                <View style={styles.choicesContainer}>
+                    <Choice style={styles.choice} text={this.props.choicesContainer[this.state.index][0]}
                             onPress={() => this.onChoice(0)}/>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][1]}
+                    <Choice style={styles.choice} text={this.props.choicesContainer[this.state.index][1]}
                             onPress={() => this.onChoice(1)}/>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][2]}
+                    <Choice style={styles.choice} text={this.props.choicesContainer[this.state.index][2]}
                             onPress={() => this.onChoice(2)}/>
                 </View>
             </View>

@@ -28,7 +28,7 @@ class Choice extends Component {
     }
 }
 
-// receives a multidimensional array of choices (text), the current answer and a boolean 'complete' indicating if the question is complete
+// receives a multidimensional array of choicesContainer (text), the current answer and a boolean 'complete' indicating if the question is complete
 export default class Choices extends Component {
     constructor(props) {
         super(props);
@@ -36,7 +36,7 @@ export default class Choices extends Component {
 
     render() {
         let choices = [];
-        for (let data of this.props.choices) {
+        for (let data of this.props.choicesContainer) {
             choices.push(<Choice text={data.text} correct={data.correct}/>)
         }
         return (

@@ -65,9 +65,9 @@ export default class QuestionDeck extends Component {
     renderQuestion(question) {
         return (
             <Card>
-            <RewriteTheSentenceQuestion body={question.body}
+            <RewriteTheSentenceQuestion body={question.bodyContainer}
                                         answer={question.answer}
-                                        choices={question.choices}/>
+                                        choices={question.choicesContainer}/>
             </Card>
         );
     }

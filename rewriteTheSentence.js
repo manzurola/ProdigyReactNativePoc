@@ -91,8 +91,8 @@ export default class RewriteTheSentenceQuestion extends Component {
     render() {
         return (
             <View style={{ flex:1,flexDirection: 'column'}}>
-                <View style={styles.body}>
-                    <Text style={styles.bodyText}>{this.props.body}</Text>
+                <View style={styles.bodyContainer}>
+                    <Text style={styles.bodyText}>{this.props.bodyContainer}</Text>
                 </View>
                 <View style={styles.answerContainer}>
                     <Answer onPress={() => this.deleteLastWordInAnswer()}
@@ -100,12 +100,12 @@ export default class RewriteTheSentenceQuestion extends Component {
                             answerKey={this.props.answer}
                             showResult={this.state.complete}/>
                 </View>
-                <View style={styles.choices}>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][0]}
+                <View style={styles.choicesContainer}>
+                    <Choice style={styles.choice} text={this.props.choicesContainer[this.state.index][0]}
                             onPress={() => this.onChoice(0)}/>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][1]}
+                    <Choice style={styles.choice} text={this.props.choicesContainer[this.state.index][1]}
                             onPress={() => this.onChoice(1)}/>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][2]}
+                    <Choice style={styles.choice} text={this.props.choicesContainer[this.state.index][2]}
                             onPress={() => this.onChoice(2)}/>
                 </View>
             </View>
@@ -114,7 +114,7 @@ export default class RewriteTheSentenceQuestion extends Component {
 
     onChoice(selectedChoiceIndex) {
         if (this.state.complete) return;
-        const selectedChoice = this.props.choices[this.state.index][selectedChoiceIndex];
+        const selectedChoice = this.props.choicesContainer[this.state.index][selectedChoiceIndex];
         this.setState((previousState) => {
             previousState.answer.push(selectedChoice);
             // if current choice was last, question is complete
@@ -143,7 +143,7 @@ export default class RewriteTheSentenceQuestion extends Component {
         });
     }
 
-    // can control animation of new choices in answer using the current index
+    // can control animation of new choicesContainer in answer using the current index
 }
 
 const styles = StyleSheet.create({

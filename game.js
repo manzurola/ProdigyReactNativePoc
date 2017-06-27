@@ -42,16 +42,20 @@ export default class Game extends Component {
     renderQuestion(data) {
         return (
             <View style={styles.questionContainer}>
-                <View style={styles.body}>
+                {/*<View style={styles.instructions}>*/}
+                    {/*<Text style={styles.instructionsText}>{data.instructions}</Text>*/}
+                {/*</View>*/}
+                <View style={styles.bodyContainer}>
                     <Text style={styles.bodyText}>{data.body}</Text>
                 </View>
                 <View style={styles.answerContainer}>
                     <Answer onPress={() => this.deleteLastWordInAnswer()}
                             words={this.state.answer}
+                            instructions={data.instructions}
                             answerKey={data.answer}
                             showResult={this.state.isAnswerComplete}/>
                 </View>
-                <View style={styles.choices}>
+                <View style={styles.choicesContainer}>
                     <Choice style={styles.choice} text={data.choices[this.state.choiceIndex][0]}
                             onPress={() => this.onChoice(0)}/>
                     <Choice style={styles.choice} text={data.choices[this.state.choiceIndex][1]}
@@ -146,22 +150,29 @@ class Choice extends Component {
 }
 
 class Answer extends Component {
+
     render() {
         let view = [];
-        for (let i = 0; i < this.props.words.length; i++) {
-            let text;
-            const word = this.props.words[i];
-            const correct = word === this.props.answerKey[i];
-            if (this.props.showResult) {
-                if (correct) {
-                    text = <Text style={[styles.answerWordText, {color:'green'}]} key={i}>{word}</Text>;
+        // show instructions if answer is empty
+        if (this.props.words.length === 0) {
+            console.log("setting instructions");
+            view.push(<Text key='0' style={styles.instructionsText}>{this.props.instructions}</Text>);
+        } else {
+            for (let i = 0; i < this.props.words.length; i++) {
+                let text;
+                const word = this.props.words[i];
+                const correct = word === this.props.answerKey[i];
+                if (this.props.showResult) {
+                    if (correct) {
+                        text = <Text style={[styles.answerWordText, {color:'green'}]} key={i}>{word}</Text>;
+                    } else {
+                        text = <Text style={[styles.answerWordText, {color:'red'}]} key={i}>{word}</Text>;
+                    }
                 } else {
-                    text = <Text style={[styles.answerWordText, {color:'red'}]} key={i}>{word}</Text>;
+                    text = <Text style={styles.answerWordText} key={i}>{word}</Text>;
                 }
-            } else {
-                text = <Text style={styles.answerWordText} key={i}>{word}</Text>;
+                view.push(text);
             }
-            view.push(text);
         }
         return (
             <TouchableHighlight
@@ -197,12 +208,25 @@ const styles = StyleSheet.create({
     footer: {
         flex: 0.1
     },
+    instructions: {
+        flex: 0.1,
+        justifyContent: 'center'
+    },
+    instructionsText: {
+        fontSize: 14,
+        textAlign: 'center'
+    },
+    bodyContainer: {
+        flex: 0.3,
+        justifyContent: 'center'
+    },
     bodyText: {
         // fontFamily: 'TheKingsoftheHouse-Regular',
         fontSize: 24,
         textAlign: 'center',
         paddingLeft: 30,
         paddingRight: 30,
+        paddingTop: 120
     },
     answerWordText: {
         padding: 2,
@@ -211,14 +235,14 @@ const styles = StyleSheet.create({
         color: "black",
         textDecorationStyle: 'solid'
     },
-    choices: {
+    choicesContainer: {
         flex: 0.25,
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     choice: {
-        width: 220,
+        width: 250,
         height: 50,
         borderWidth: 1,
         borderRadius: 30,
@@ -245,10 +269,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'black'
     },
-    body: {
-        flex: 0.3,
-        justifyContent: 'center',
-    },
     answerContainer: {
         flex: 0.25,
         flexDirection: 'column',
@@ -266,6 +286,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingLeft: 30,
         paddingRight: 30,
-        width: 300
+        width: 320
     }
 });

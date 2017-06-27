@@ -37,6 +37,31 @@ const rewriteTheSentencedata2 = {
 
 const GameQuestionData = [
     {
+        instructions: "fill in the blanks",
+        body: "Will you have ___ more tea?",
+        answer: ["some"],
+        choices: [
+            ["any", "some", "a"],
+        ]
+    },
+    {
+        instructions: "fill in the blanks",
+        body: "I ___ you for a long time.",
+        answer: ["haven't seen"],
+        choices: [
+            ["did not see", "haven't seen", "didn't saw"],
+        ]
+    },
+    {
+        instructions: "fill in the blanks",
+        body: "He ___ here since Christmas; I wonder where he ___ since then.",
+        answer: ["hasn't been, has lived"],
+        choices: [
+            ["hasn't been / has lived", "wasn't / lived", "hasn't be / has live"]
+        ]
+    },
+    {
+        instructions: "rewrite the sentence into the plural",
         body: "A dog is cute.",
         answer: ["dogs", "are", "cute"],
         choices: [
@@ -46,6 +71,7 @@ const GameQuestionData = [
             ]
     },
     {
+        instructions: "rewrite the sentence into the plural",
         body: "Exercises are not always easy for beginners.",
         answer: ["an", "exercise", "is", "not", "always", "easy", "for", "a", "beginner"],
         choices: [
@@ -63,7 +89,7 @@ const GameQuestionData = [
 ];
 
 const fillInTheBlanksedata = {
-    // body: ["<?>", " dog is cute."],
+    // bodyContainer: ["<?>", " dog is cute."],
     body: [
         {
             text: "<?>",
@@ -90,8 +116,8 @@ export default class ProdigyReactNativePoc extends Component {
                 <Game questions={GameQuestionData}/>
                 {/*<View style={styles.questionContainer}>*/}
                     {/*/!*<QuestionDeck/>*!/*/}
-                    {/*<RewriteTheSentenceQuestion body={rewriteTheSentencedata2.body} answer={rewriteTheSentencedata2.answer} choices={rewriteTheSentencedata2.choices}/>*/}
-                    {/*/!*<FillInTheBlanksQuestion body={fillInTheBlanksedata.body} answer={fillInTheBlanksedata.answer}*!/*/}
+                    {/*<RewriteTheSentenceQuestion bodyContainer={rewriteTheSentencedata2.bodyContainer} answer={rewriteTheSentencedata2.answer} choices={rewriteTheSentencedata2.choices}/>*/}
+                    {/*/!*<FillInTheBlanksQuestion bodyContainer={fillInTheBlanksedata.bodyContainer} answer={fillInTheBlanksedata.answer}*!/*/}
                                              {/*/!*choices={fillInTheBlanksedata.choices}*!/*/}
                                              {/*/!*blankToken={fillInTheBlanksedata.blankToken}/>*!/*/}
                 {/*</View>*/}
