@@ -53,8 +53,9 @@ const DATA = [
 export default class QuestionDeck extends Component {
 
     render() {
+        console.log(this.props);
         return (
-            <SwipeDeck data={DATA}
+            <SwipeDeck data={this.props.data}
                        renderCard={this.renderQuestion}
                        renderNoMoreCards={this.renderNoMoreCards}
                        onSwipeRight={this.onSwipeRight}
@@ -65,9 +66,9 @@ export default class QuestionDeck extends Component {
     renderQuestion(question) {
         return (
             <Card>
-            <RewriteTheSentenceQuestion body={question.bodyContainer}
+            <RewriteTheSentenceQuestion body={question.body}
                                         answer={question.answer}
-                                        choices={question.choicesContainer}/>
+                                        choices={question.choices}/>
             </Card>
         );
     }
