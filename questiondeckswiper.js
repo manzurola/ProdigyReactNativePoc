@@ -1,10 +1,8 @@
 /**
  * Created by guym on 27/06/2017.
  */
-import RewriteTheSentenceQuestion from "./question.js";
 import Swiper from "react-native-deck-swiper";
 import React, {Component} from "react";
-import {SwipeDeck, Card} from "react-native-elements";
 import {
     AppRegistry,
     StyleSheet,
@@ -21,35 +19,28 @@ import {
 
 
 export default class QuestionDeckSwiper extends Component {
+
+    constructor(props) {
+        super(props);
+        console.log("QuestionDeckSwiper constructor:");
+        console.log(props);
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <Swiper
-                    cards={this.props.questions}
-                    renderCard={this.renderQuestion}
+                    cards={this.props.data}
+                    renderCard={this.props.renderQuestion}
                     onSwiped={(cardIndex) => {console.log(cardIndex)}}
                     onSwipedAll={() => {console.log('onSwipedAll')}}
                     cardIndex={0}
                     backgroundColor={'#4FD0E9'}>
-                    <Button
-                        onPress={() => {console.log('oulala')}}
-                        title="Press me">
-                        You can press me
-                    </Button>
                 </Swiper>
             </View>
         )
     }
 
-    renderQuestion(question) {
-        return (
-            <View style={styles.card}>
-                <Question body={question.body}
-                          answer={question.answer}
-                          choices={question.choices}/>
-            </View>
-        );
-    }
 }
 
 const styles = StyleSheet.create({

@@ -1,6 +1,8 @@
 /**
  * Created by guym on 24/06/2017.
  */
+import QuestionDeckSwiper from "./questiondeckswiper.js";
+import QuestionDeck from "./questiondeck.js";
 import React, {Component} from "react";
 import {
     AppRegistry,
@@ -22,10 +24,7 @@ export default class Game extends Component {
         super(props);
         this.state = {
             isGameOver: false,
-            questionIndex: 0,
-            isAnswerComplete: false,
-            answer: [],
-            answerIndex: 0
+            questionIndex: 0
         };
     }
 
@@ -33,9 +32,15 @@ export default class Game extends Component {
         return (
             <View style={styles.container}>
                 <View style={styles.header}/>
-                <Question {...this.getCurrentQuestion()} completed={this.onQuestionCompleted}/>
+                <QuestionDeckSwiper data={this.props.questions} renderQuestion={(data) => {return this.renderQuestion(data)}}/>
                 <View style={styles.footer}/>
             </View>
+        );
+    }
+
+    renderQuestion(data) {
+        return (
+            <Question {...data} completed={(question) => {this.onQuestionCompleted(question)}}/>
         );
     }
 
@@ -45,57 +50,12 @@ export default class Game extends Component {
         this.setState((previousState) => {
             let gameOver = this.props.questions.length === previousState.questionIndex + 1;
             return {
-                answer: [],
                 isGameOver: gameOver,
-                questionIndex: gameOver ? previousState.questionIndex : previousState.questionIndex + 1,
-                answerIndex: 0,
-                isAnswerComplete: false
+                questionIndex: gameOver ? previousState.questionIndex : previousState.questionIndex + 1
             }
         });
     }
 
-    onChoice(selectedChoiceIndex) {
-        // if question complete then move on to next question
-        // else put choice in answer
-        // if question is complete, validate answer
-
-        let question = this.getCurrentQuestion();
-
-        // if a choice was clicked after a question is complete, move on to next question and reset state
-        const answerComplete = question.answer.length === this.state.answer.length;
-        if (answerComplete) {
-            console.log("answer is complete, moving on to next question");
-            this.setState((previousState) => {
-                let gameOver = this.props.questions.length === previousState.questionIndex + 1;
-                return {
-                    answer: [],
-                    isGameOver: gameOver,
-                    questionIndex: gameOver ? previousState.questionIndex : previousState.questionIndex + 1,
-                    answerIndex: 0,
-                    isAnswerComplete: false
-                }
-            });
-        } else {
-            console.log("answer is not complete, adding selected choice to answer");
-            // add the choice to the answer and evaluate if question is complete
-            const selectedChoice = question.choices[this.state.answerIndex][selectedChoiceIndex];
-            // if current choice was last, question is complete
-            this.setState((previousState) => {
-                previousState.answer.push(selectedChoice);
-                const answerComplete = question.answer.length === this.state.answer.length;
-                console.log("isAnswerComplete: " + answerComplete);
-                return {
-                    answer: previousState.answer,
-                    answerIndex: answerComplete ? previousState.answerIndex : previousState.answerIndex + 1,
-                    isAnswerComplete: answerComplete
-                }
-            });
-        }
-    }
-
-    getCurrentQuestion() {
-        return this.props.questions[this.state.questionIndex];
-    }
 }
 
 class Choice extends Component {
@@ -124,6 +84,9 @@ class Question extends Component {
 
     constructor(props) {
         super(props);
+
+        console.log("calling question constructor");
+
         this.state = {
             isAnswerComplete: false,
             answer: [],
@@ -179,16 +142,24 @@ class Question extends Component {
     onChoice(selectedChoiceIndex) {
 
         // if question is complete then do nothing
+
         if (this.state.isAnswerComplete) return;
 
         console.log("adding choice to answer");
+
         // add the choice to the answer and evaluate if question is complete
+
         const selectedChoice = this.props.choices[this.state.answerIndex][selectedChoiceIndex];
-        // if current choice was last, question is complete
+
         this.setState((previousState) => {
             previousState.answer.push(selectedChoice);
+
+            // if current choice was last, question is complete
+
             const answerComplete = this.props.answer.length === this.state.answer.length;
+
             console.log("isAnswerComplete: " + answerComplete);
+
             return {
                 answer: previousState.answer,
                 answerIndex: answerComplete ? previousState.answerIndex : previousState.answerIndex + 1,
