@@ -7,6 +7,8 @@ import FillInTheBlanksQuestion from "./fillInTheblanks.js";
 import RewriteTheSentenceQuestion from "./rewriteTheSentence.js";
 import QuestionDeck from "./questiondeck.js";
 import Game from "./game.js";
+import QuestionDeckSwiper from "./questiondeckswiper.js";
+import QuestionDeckSwipeCard from "./questiondeckswipecards.js";
 import React, {Component} from "react";
 import {AppRegistry, StyleSheet, Text, View, StatusBar} from "react-native";
 
@@ -114,8 +116,10 @@ export default class ProdigyReactNativePoc extends Component {
         return (
             <View style={styles.container}>
                 <StatusBar hidden={true}/>
-                <QuestionDeck data={GameQuestionData}/>
-                {/*<Game questions={GameQuestionData}/>*/}
+                {/*<QuestionDeckSwipeCard data={GameQuestionData}/>*/}
+                {/*<QuestionDeckSwiper questions={GameQuestionData}/>*/}
+                {/*<QuestionDeck data={GameQuestionData}/>*/}
+                <Game questions={GameQuestionData}/>
                 {/*<View style={styles.questionContainer}>*/}
                     {/*/!*<QuestionDeck/>*!/*/}
                     {/*<RewriteTheSentenceQuestion bodyContainer={rewriteTheSentencedata2.bodyContainer} answer={rewriteTheSentencedata2.answer} choices={rewriteTheSentencedata2.choices}/>*/}
