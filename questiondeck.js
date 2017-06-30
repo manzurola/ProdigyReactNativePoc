@@ -3,7 +3,7 @@
  */
 import React, {Component} from "react";
 import {SwipeDeck, Card} from "react-native-elements";
-import RewriteTheSentenceQuestion from "./rewriteTheSentence.js";
+import Question from "./question.js";
 import {
     AppRegistry,
     StyleSheet,
@@ -66,9 +66,9 @@ export default class QuestionDeck extends Component {
     renderQuestion(question) {
         return (
             <Card>
-            <RewriteTheSentenceQuestion body={question.body}
-                                        answer={question.answer}
-                                        choices={question.choices}/>
+            <Question body={question.body}
+                      answer={question.answer}
+                      choices={question.choices}/>
             </Card>
         );
     }

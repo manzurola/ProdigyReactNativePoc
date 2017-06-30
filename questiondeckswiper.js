@@ -1,7 +1,7 @@
 /**
  * Created by guym on 27/06/2017.
  */
-import RewriteTheSentenceQuestion from "./rewriteTheSentence.js";
+import RewriteTheSentenceQuestion from "./question.js";
 import Swiper from "react-native-deck-swiper";
 import React, {Component} from "react";
 import {SwipeDeck, Card} from "react-native-elements";
@@ -44,9 +44,9 @@ export default class QuestionDeckSwiper extends Component {
     renderQuestion(question) {
         return (
             <View style={styles.card}>
-                <RewriteTheSentenceQuestion body={question.body}
-                                            answer={question.answer}
-                                            choices={question.choices}/>
+                <Question body={question.body}
+                          answer={question.answer}
+                          choices={question.choices}/>
             </View>
         );
     }

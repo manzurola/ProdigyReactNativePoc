@@ -2,7 +2,7 @@
  * Created by guym on 27/06/2017.
  */
 import SwipeCards from 'react-native-swipe-cards';
-import RewriteTheSentenceQuestion from "./rewriteTheSentence.js";
+import RewriteTheSentenceQuestion from "./question.js";
 import React, {Component} from "react";
 import {
     AppRegistry,
@@ -22,9 +22,9 @@ class Card extends Component {
     render() {
         return (
             <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
-                <RewriteTheSentenceQuestion body={this.props.body}
-                                            answer={this.props.answer}
-                                            choices={this.props.choices}/>
+                <Question body={this.props.body}
+                          answer={this.props.answer}
+                          choices={this.props.choices}/>
             </View>
         )
     };

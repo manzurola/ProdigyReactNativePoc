@@ -77,7 +77,7 @@ class Answer extends Component {
     }
 }
 
-export default class RewriteTheSentenceQuestion extends Component {
+export default class Question extends Component {
 
     constructor(props) {
         super(props);
