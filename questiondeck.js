@@ -1,8 +1,9 @@
 /**
  * Created by guym on 23/06/2017.
  */
+import STYLES from "./styles.js";
 import React, {Component} from "react";
-import {SwipeDeck, Card} from "react-native-elements";
+import Question from "./question.js";
 import {
     AppRegistry,
     StyleSheet,
@@ -14,26 +15,32 @@ import {
     ListView,
     TouchableHighlight,
     TouchableWithoutFeedback
-} from "react-native"
+} from "react-native";
 
 export default class QuestionDeck extends Component {
+
+    constructor(props) {
+        super(props);
+        console.log('QuestionDeck constructor, props:');
+        console.log(props);
+        this.state = {
+            index: 0
+        }
+    }
 
     render() {
         console.log("questionDeck render");
         console.log(this.props);
         return (
-            <SwipeDeck data={this.props.data}
-                       renderCard={() => {return <Card>{this.props.renderQuestion}</Card>}}
-                       renderNoMoreCards={this.renderNoMoreCards}
-                       onSwipeRight={this.onSwipeRight}
-                       onSwipeLeft={this.onSwipeLeft}/>
+            <View style={STYLES.questionDeck}>
+                <Question {...this.props.data[this.state.index]} completed={(question) => {this.onQuestionCompleted(question)}}/>
+            </View>
         );
     }
 
-    renderQuestionCard(renderQuestion) {
-        return (
-            <Card>{renderQuestion}</Card>
-        )
+    onQuestionCompleted(question) {
+        console.log('question completed');
+        console.log(question);
     }
 
     onSwipeRight(card) {
@@ -43,4 +50,12 @@ export default class QuestionDeck extends Component {
     onSwipeLeft(card) {
         console.log('Card disliked: ' + card.text);
     }
-}
+
+    swipeRight() {
+        this.setState((previousState) => {
+            return {
+                index: previousState.index + 1
+            }
+        })
+    }
+};

@@ -1,6 +1,7 @@
 /**
  * Created by guym on 05/06/2017.
  */
+import STYLES from "./styles.js";
 import React, {Component} from "react";
 import {
     AppRegistry,
@@ -15,56 +16,142 @@ import {
     TouchableWithoutFeedback
 } from "react-native";
 
-class Choice extends Component {
+export default class Question extends Component {
+
     constructor(props) {
         super(props);
+
+        console.log("calling question constructor");
+
         this.state = {
-            pressed: false
-        }
+            isAnswerComplete: false,
+            answer: [],
+            answerIndex: 0
+        };
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log('componentWillReceiveProps:');
-        console.log(nextProps);
+    getAnswer() {
+        return this.state.answer;
     }
 
+    isCorrect() {
+        return
+    }
 
     render() {
         return (
-            <TouchableHighlight activeOpacity={1}
-                                style={this.state.pressed ? styles.choicePressed : styles.choice}
-                                onPress={this.props.onPress}
-                                onHideUnderlay={()=>{this.setState({pressed: false})}}
-                                onShowUnderlay={()=>{this.setState({pressed: true})}}
-            >
-                <Text style={this.state.pressed ? styles.choiceTextPressed: styles.choiceText}>{this.props.text}</Text>
-            </TouchableHighlight>
-        )
+            <View style={STYLES.questionContainer}>
+                <View style={STYLES.bodyContainer}>
+                    <Text style={STYLES.bodyText}>{this.props.body}</Text>
+                </View>
+                <View style={STYLES.answerContainer}>
+                    <Answer onPress={() => this.deleteLastWordInAnswer()}
+                            words={this.state.answer}
+                            instructions={this.props.instructions}
+                            answerKey={this.props.answer}
+                            showResult={this.state.isAnswerComplete}/>
+                </View>
+                <View style={STYLES.choicesContainer}>
+                    <Choice style={STYLES.choice} text={this.props.choices[this.state.answerIndex][0]}
+                            onPress={() => this.onChoice(0)}/>
+                    <Choice style={STYLES.choice} text={this.props.choices[this.state.answerIndex][1]}
+                            onPress={() => this.onChoice(1)}/>
+                    <Choice style={STYLES.choice} text={this.props.choices[this.state.answerIndex][2]}
+                            onPress={() => this.onChoice(2)}/>
+                </View>
+            </View>
+        );
+    }
+
+    deleteLastWordInAnswer() {
+        console.log("delete last word in answer");
+        if (this.state.answer.length === 0 || this.state.isAnswerComplete) return;
+        this.setState((previousState) => {
+            previousState.answer.pop();
+            return {
+                answer: previousState.answer,
+                answerIndex: previousState.answerIndex - 1
+            }
+        });
+    }
+
+    onChoice(selectedChoiceIndex) {
+
+        // if question is complete then do nothing
+
+        if (this.state.isAnswerComplete) return;
+
+        console.log("adding choice to answer");
+
+        // add the choice to the answer and evaluate if question is complete
+
+        const selectedChoice = this.props.choices[this.state.answerIndex][selectedChoiceIndex];
+
+        let answerComplete = false;
+
+        this.setState((previousState) => {
+
+            previousState.answer.push(selectedChoice);
+
+            // if current choice was last, question is complete
+
+            answerComplete = this.props.answer.length === this.state.answer.length;
+
+            console.log("isAnswerComplete: " + answerComplete);
+
+            return {
+                answer: previousState.answer,
+                answerIndex: answerComplete ? previousState.answerIndex : previousState.answerIndex + 1,
+                isAnswerComplete: answerComplete
+            }
+        });
+
+        if (answerComplete) this.completed();
+    }
+
+    completed() {
+        this.props.completed(this);
     }
 }
 
 class Answer extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            isComplete: false,
+            isCorrect: false,
+            input: []
+        }
+    }
+
     render() {
         let view = [];
-        for (let i = 0; i < this.props.words.length; i++) {
-            let text;
-            const word = this.props.words[i];
-            const correct = word === this.props.answerKey[i];
-            if (this.props.showResult) {
-                if (correct) {
-                    text = <Text style={[styles.answerWordText, {color:'green'}]} key={i}>{word}</Text>;
+        // show instructions if answer is empty
+        if (this.props.words.length === 0) {
+            console.log("setting instructions");
+            view.push(<Text key='0' style={STYLES.instructionsText}>{this.props.instructions}</Text>);
+        } else {
+            for (let i = 0; i < this.props.words.length; i++) {
+                let text;
+                const word = this.props.words[i];
+                const correct = word === this.props.answerKey[i];
+                if (this.props.showResult) {
+                    if (correct) {
+                        text = <Text style={[STYLES.answerWordText, {color:'green'}]} key={i}>{word}</Text>;
+                    } else {
+                        text = <Text style={[STYLES.answerWordText, {color:'red'}]} key={i}>{word}</Text>;
+                    }
                 } else {
-                    text = <Text style={[styles.answerWordText, {color:'red'}]} key={i}>{word}</Text>;
+                    text = <Text style={STYLES.answerWordText} key={i}>{word}</Text>;
                 }
-            } else {
-                text = <Text style={styles.answerWordText} key={i}>{word}</Text>;
+                view.push(text);
             }
-            view.push(text);
         }
         return (
             <TouchableHighlight
                 onPress={this.props.onPress}
-                style={styles.answer}>
+                style={STYLES.answer}>
                 <View style={{
                     flexWrap: 'wrap',
                     flexDirection: 'row',
@@ -77,145 +164,24 @@ class Answer extends Component {
     }
 }
 
-export default class Question extends Component {
-
+class Choice extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0,
-            answer: [],
-            complete: false
+            pressed: false
         }
     }
 
     render() {
         return (
-            <View style={{ flex:1,flexDirection: 'column'}}>
-                <View style={styles.bodyContainer}>
-                    <Text style={styles.bodyText}>{this.props.body}</Text>
-                </View>
-                <View style={styles.answerContainer}>
-                    <Answer onPress={() => this.deleteLastWordInAnswer()}
-                            words={this.state.answer}
-                            answerKey={this.props.answer}
-                            showResult={this.state.complete}/>
-                </View>
-                <View style={styles.choicesContainer}>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][0]}
-                            onPress={() => this.onChoice(0)}/>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][1]}
-                            onPress={() => this.onChoice(1)}/>
-                    <Choice style={styles.choice} text={this.props.choices[this.state.index][2]}
-                            onPress={() => this.onChoice(2)}/>
-                </View>
-            </View>
-        );
+            <TouchableHighlight activeOpacity={1}
+                                style={this.state.pressed ? STYLES.choicePressed : STYLES.choice}
+                                onPress={this.props.onPress}
+                                onHideUnderlay={()=>{this.setState({pressed: false})}}
+                                onShowUnderlay={()=>{this.setState({pressed: true})}}
+            >
+                <Text style={this.state.pressed ? STYLES.choiceTextPressed: STYLES.choiceText}>{this.props.text}</Text>
+            </TouchableHighlight>
+        )
     }
-
-    onChoice(selectedChoiceIndex) {
-        if (this.state.complete) return;
-        const selectedChoice = this.props.choices[this.state.index][selectedChoiceIndex];
-        this.setState((previousState) => {
-            previousState.answer.push(selectedChoice);
-            // if current choice was last, question is complete
-            const questionComplete = this.props.answer.length === this.state.answer.length;
-            return {
-                answer: previousState.answer,
-                index: questionComplete ? previousState.index : previousState.index + 1,
-                complete: questionComplete
-            }
-        });
-    }
-
-    skipQuestion() {
-        console.log('TODO skip question');
-    }
-
-    deleteLastWordInAnswer() {
-        console.log("delete last word in answer");
-        if (this.state.index === 0 || this.state.complete) return;
-        this.setState((previousState) => {
-            previousState.answer.pop();
-            return {
-                answer: previousState.answer,
-                index: previousState.index - 1
-            }
-        });
-    }
-
-    // can control animation of new choicesContainer in answer using the current index
 }
-
-const styles = StyleSheet.create({
-    bodyText: {
-        // fontFamily: 'TheKingsoftheHouse-Regular',
-        fontSize: 24,
-        textAlign: 'center',
-        paddingLeft: 30,
-        paddingRight: 30,
-    },
-    answerWordText: {
-        padding: 2,
-        fontSize: 20,
-        textAlign: 'center',
-        color: "black",
-        textDecorationStyle: 'solid'
-    },
-    choicesContainer: {
-        flex: 0.25,
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    choice: {
-        width: 220,
-        height: 50,
-        borderWidth: 1,
-        borderRadius: 30,
-        justifyContent: 'center',
-        overflow: 'hidden',
-        backgroundColor: 'black'
-    },
-    choicePressed: {
-        width: 220,
-        height: 50,
-        borderWidth: 1,
-        borderRadius: 30,
-        justifyContent: 'center',
-        overflow: 'hidden',
-        backgroundColor: 'white'
-    },
-    choiceText: {
-        textAlign: 'center',
-        fontSize: 20,
-        color: 'white'
-    },
-    choiceTextPressed: {
-        textAlign: 'center',
-        fontSize: 20,
-        color: 'black'
-    },
-    body: {
-        flex: 0.3,
-        justifyContent: 'center',
-    },
-    answerContainer: {
-        flex: 0.25,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    answer: {
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderRadius: 30,
-        minHeight: 50,
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingLeft: 30,
-        paddingRight: 30,
-        width: 300
-    }
-});
